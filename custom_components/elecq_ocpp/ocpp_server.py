@@ -19,6 +19,8 @@ from ocpp.v201.enums import (
     RegistrationStatusEnumType,
     RequestStartStopStatusEnumType,
     MessageTriggerEnumType,  # 👈 NEW
+    ChargingProfilePurposeEnumType,  # 👈 AJOUT
+    ChargingProfileStatusEnumType,
 )
 
 from .const import SIGNAL_STATE_UPDATED
@@ -45,6 +47,7 @@ class ElecqChargerState:
     charging: bool = False
 
     remote_stop_requested: bool = False
+    current_limit: float = 32.0
 
     transaction_id: Optional[str] = None
     last_status: Optional[str] = None
@@ -442,3 +445,53 @@ class ElecqChargePoint(OcppChargePointBase):
         )
 
         return call_result.TransactionEvent()
+    
+    async def async_set_charge_rate(self, limit_amps: int) -> bool:
+        """Envoie une consigne de délestage via un ChargingProfile OCPP 2.0.1."""
+        if self._cp is None:
+            _LOGGER.warning("Impossible d'ajuster l'intensité : aucune borne connectée.")
+            return False
+
+        # Construction du profil de charge absolu conforme aux specs OCPP 2.0.1
+        request = call.SetChargingProfile(
+            evse_id=self.evse_id,
+            charging_profile={
+                "id": 100,  # ID unique arbitraire pour ce profil de délestage
+                "stackLevel": 1,  # Priorité supérieure aux profils par défaut
+                "chargingProfilePurpose": ChargingProfilePurposeEnumType.tx_profile,
+                "chargingProfileKind": "Absolute",
+                "chargingSchedule": {
+                    "id": 101,
+                    "chargingRateUnit": "A",  # Limitation exprimée en Ampères
+                    "chargingSchedulePeriod": [
+                        {
+                            "startPeriod": 0,  # S'applique immédiatement
+                            "limit": float(limit_amps)
+                        }
+                    ]
+                }
+            }
+        )
+
+        _LOGGER.info("Envoi du ChargingProfile (Délestage) -> %d A : %s", limit_amps, request)
+        
+        try:
+            response = await self._cp.call(request)
+        except Exception as err:
+            _LOGGER.exception("Erreur lors de l'envoi du ChargingProfile : %s", err)
+            return False
+
+        _LOGGER.info("Réponse SetChargingProfile reçue : %s", response)
+        
+        # Vérification si la borne Elecq accepte la consigne
+        ok = (
+            getattr(response, "status", None)
+            == ChargingProfileStatusEnumType.accepted
+        )
+        
+        if ok:
+            # On mémorise la nouvelle limite validée et on avertit HA pour mettre à jour l'UI
+            self.state.current_limit = float(limit_amps)
+            self._notify()
+            
+        return ok

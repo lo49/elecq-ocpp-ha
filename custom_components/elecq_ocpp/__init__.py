@@ -18,7 +18,7 @@ from .ocpp_server import ElecqOcppManager
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[str] = ["sensor", "binary_sensor", "switch"]
+PLATFORMS: list[str] = ["sensor", "binary_sensor", "switch", "number"]
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
