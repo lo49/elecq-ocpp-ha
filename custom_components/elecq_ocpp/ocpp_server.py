@@ -16,7 +16,7 @@ from ocpp.routing import on
 from ocpp.v201 import ChargePoint as OcppChargePointBase
 from ocpp.v201 import call, call_result
 from ocpp.v201.enums import (
-    RegistrationStatusEnumType,
+    RegistrationStatusType,
     RequestStartStopStatusEnumType,
     MessageTriggerEnumType,  # 👈 NEW
     ChargingProfilePurposeEnumType,  # 👈 AJOUT
@@ -423,7 +423,7 @@ class ElecqChargePoint(OcppChargePointBase):
         return call_result.BootNotification(
             current_time=datetime.now(timezone.utc).isoformat(),
             interval=60,
-            status=RegistrationStatusEnumType.accepted,
+            status=RegistrationStatusType.accepted,
         )
 
     @on("Heartbeat")
