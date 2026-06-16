@@ -17,10 +17,10 @@ from ocpp.v201 import ChargePoint as OcppChargePointBase
 from ocpp.v201 import call, call_result
 from ocpp.v201.enums import (
     RegistrationStatusType,
-    RequestStartStopStatusEnumType,
+    RequestStartStopStatusType,
     MessageTriggerEnumType,  # 👈 NEW
-    ChargingProfilePurposeEnumType,  # 👈 AJOUT
-    ChargingProfileStatusEnumType,
+    ChargingProfilePurposeType,  # 👈 AJOUT
+    ChargingProfileStatusType,
 )
 
 from .const import SIGNAL_STATE_UPDATED
@@ -242,7 +242,7 @@ class ElecqOcppManager:
         _LOGGER.info("RequestStartTransaction response: %s", response)
         ok = (
             getattr(response, "status", None)
-            == RequestStartStopStatusEnumType.accepted
+            == RequestStartStopStatusType.accepted
         )
         if ok:
             self.state.remote_stop_requested = False
@@ -268,7 +268,7 @@ class ElecqOcppManager:
         _LOGGER.info("RequestStopTransaction response: %s", response)
         ok = (
             getattr(response, "status", None)
-            == RequestStartStopStatusEnumType.accepted
+            == RequestStartStopStatusType.accepted
         )
         if ok:
             st.remote_stop_requested = True
@@ -364,7 +364,7 @@ class ElecqOcppManager:
             charging_profile={
                 "id": 100,  # ID unique arbitraire pour ce profil de délestage
                 "stackLevel": 1,  # Priorité supérieure aux profils par défaut
-                "chargingProfilePurpose": ChargingProfilePurposeEnumType.tx_profile,
+                "chargingProfilePurpose": ChargingProfilePurposeType.tx_profile,
                 "chargingProfileKind": "Absolute",
                 "chargingSchedule": {
                     "id": 101,
@@ -392,7 +392,7 @@ class ElecqOcppManager:
         # Vérification si la borne Elecq accepte la consigne
         ok = (
             getattr(response, "status", None)
-            == ChargingProfileStatusEnumType.accepted
+            == ChargingProfileStatusType.accepted
         )
         
         if ok:
