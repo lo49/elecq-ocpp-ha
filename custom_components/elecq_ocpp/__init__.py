@@ -1,3 +1,12 @@
+# --- HACK DE COMPATIBILITÉ JSONSCHEMA (Python 3.14 / HA Core) ---
+import sys
+import jsonschema
+
+if not hasattr(jsonschema, "_validators") and hasattr(jsonschema, "validators"):
+    jsonschema._validators = jsonschema.validators
+    sys.modules["jsonschema._validators"] = jsonschema.validators
+# ----------------------------------------------------------------
+
 from __future__ import annotations
 
 import logging
