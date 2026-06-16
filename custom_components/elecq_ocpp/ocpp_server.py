@@ -18,7 +18,7 @@ from ocpp.v201 import call, call_result
 from ocpp.v201.enums import (
     RegistrationStatusType,
     RequestStartStopStatusType,
-    MessageTriggerEnumType,  # 👈 NEW
+    MessageTriggerType,  # 👈 NEW
     ChargingProfilePurposeType,  # 👈 AJOUT
     ChargingProfileStatusType,
 )
@@ -287,7 +287,7 @@ class ElecqOcppManager:
         try:
             # NOTE: do NOT pass evse_id here; this ocpp version doesn't accept it
             req = call.TriggerMessage(
-                requested_message=MessageTriggerEnumType.status_notification,
+                requested_message=MessageTriggerType.status_notification,
             )
             _LOGGER.info(
                 "Sending TriggerMessage(StatusNotification) to Elecq for manual refresh: %s",
