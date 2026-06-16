@@ -20,7 +20,7 @@ from ocpp.v201.enums import (
     RequestStartStopStatusType,
     MessageTriggerType,  # 👈 NEW
     ChargingProfilePurposeType,  # 👈 AJOUT
-    ChargingProfileStatusType,
+    ChargingProfileStatus,
 )
 
 from .const import SIGNAL_STATE_UPDATED
@@ -392,7 +392,7 @@ class ElecqOcppManager:
         # Vérification si la borne Elecq accepte la consigne
         ok = (
             getattr(response, "status", None)
-            == ChargingProfileStatusType.accepted
+            == ChargingProfileStatus.accepted
         )
         
         if ok:
