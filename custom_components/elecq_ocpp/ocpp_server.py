@@ -359,7 +359,7 @@ class ElecqOcppManager:
             return False
 
         # Construction du profil de charge absolu conforme aux specs OCPP 2.0.1
-        request = call.SetChargingProfile(
+        request = call.SetChargingProfileRequest(
             evse_id=self.evse_id,
             charging_profile={
                 "id": 100,  # ID unique arbitraire pour ce profil de délestage
