@@ -9,8 +9,9 @@
   "issue_tracker": "https://github.com/BashTheDog/elecq-ocpp-ha/issues",
   "dependencies": [],
   "requirements": [
-    "ocpp==0.16.1",
-    "websockets>=10.0"
+    "ocpp==0.16.0",
+    "websockets>=10.0",
+    "jsonschema==4.21.1"
   ],
   "iot_class": "local_push",
   "integration_type": "device",
