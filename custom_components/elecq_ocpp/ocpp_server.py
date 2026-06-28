@@ -420,7 +420,7 @@ class ElecqChargePoint(OcppChargePointBase):
             reason,
         )
 
-        return call_result.BootNotification(
+        return call_result.BootNotificationPayload(
             current_time=datetime.now(timezone.utc).isoformat(),
             interval=60,
             status=RegistrationStatusType.accepted,
@@ -428,7 +428,7 @@ class ElecqChargePoint(OcppChargePointBase):
 
     @on("Heartbeat")
     async def on_heartbeat(self, **kwargs):
-        return call_result.Heartbeat(
+        return call_result.HeartbeatPayload(
             current_time=datetime.now(timezone.utc).isoformat(),
         )
 
@@ -463,7 +463,7 @@ class ElecqChargePoint(OcppChargePointBase):
         st.last_update = datetime.now(timezone.utc)
         self._manager._notify()
 
-        return call_result.StatusNotification()
+        return call_result.StatusNotificationPayload()
 
     @on("TransactionEvent")
     async def on_transaction_event(
@@ -495,6 +495,6 @@ class ElecqChargePoint(OcppChargePointBase):
             meter_value=meter_value,
         )
 
-        return call_result.TransactionEvent()
+        return call_result.TransactionEventPayload()
     
 
