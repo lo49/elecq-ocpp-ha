@@ -319,7 +319,9 @@ class ElecqOcppManager:
             self._cp = cp
 
             try:
-                await cp.start()
+                # 🛠️ CORRECTIF : On passe le démarrage synchrone/bloquant de la lib ocpp 
+                # dans l'exécuteur de threads de Home Assistant pour libérer le loop principal.
+                await self.hass.async_add_executor_job(cp.start)
             except ConnectionClosed:
                 _LOGGER.info("Elecq OCPP: connection closed for %s", cp_id)
             finally:
