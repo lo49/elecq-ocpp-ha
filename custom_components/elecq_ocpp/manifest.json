@@ -1,17 +1,23 @@
 {
   "domain": "elecq_ocpp",
   "name": "Elecq OCPP",
-  "codeowners": ["@BashTheDog"],
+  "codeowners": [
+    "@BashTheDog"
+  ],
   "version": "1.0.4",
   "documentation": "https://github.com/BashTheDog/elecq-ocpp-ha",
   "issue_tracker": "https://github.com/BashTheDog/elecq-ocpp-ha/issues",
   "dependencies": [],
   "requirements": [
-    "ocpp==0.16.0",
+    "ocpp==0.16.1",
     "websockets>=10.0"
   ],
   "iot_class": "local_push",
   "integration_type": "device",
-  "loggers": ["ocpp", "websockets", "custom_components.elecq_ocpp"],
+  "loggers": [
+    "ocpp",
+    "websockets",
+    "custom_components.elecq_ocpp"
+  ],
   "config_flow": true
 }

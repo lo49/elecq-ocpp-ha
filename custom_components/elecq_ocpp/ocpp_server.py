@@ -366,7 +366,8 @@ class ElecqOcppManager:
                 "stackLevel": 1,  # Priorité supérieure aux profils par défaut
                 "chargingProfilePurpose": ChargingProfilePurposeType.tx_profile,
                 "chargingProfileKind": "Absolute",
-                "chargingSchedule": {
+                "chargingSchedule": [
+                    {
                     "id": 101,
                     "chargingRateUnit": "A",  # Limitation exprimée en Ampères
                     "chargingSchedulePeriod": [
@@ -375,7 +376,8 @@ class ElecqOcppManager:
                             "limit": float(limit_amps)
                         }
                     ]
-                }
+                    }
+                ]
             }
         )
 
